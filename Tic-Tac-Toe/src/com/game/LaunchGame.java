@@ -80,7 +80,7 @@ class HumanPlayer{
 		this.mark = mark;
 	}
 	
-	boolean isValidMove(int row, int column) {
+	static boolean isValidMove(int row, int column) {
 		
 		if(row >= 0 && row <= 2 && column >= 0 && column <= 2) {
 			
@@ -104,8 +104,18 @@ class HumanPlayer{
 			column = scan.nextInt();
 		} while (!isValidMove(row, column));
 		
-		TicTacToe.placeMark(row, column, mark);
-		
+		TicTacToe.placeMark(row, column, mark);		
+	}
+	
+	static boolean isBoardFull() {
+	    for (int i = 0; i < TicTacToe.board.length; i++) {
+	        for (int j = 0; j < TicTacToe.board[i].length; j++) {
+	            if (TicTacToe.board[i][j] == ' ') {
+	                return false;
+	            }
+	        }
+	    }
+	    return true;
 	}
 }
 
@@ -115,11 +125,11 @@ public class LaunchGame {
 		TicTacToe t = new TicTacToe();
 		
 		Scanner scan = new Scanner(System.in);
-		System.out.println("Enter the P1 name");
-		String player1 = scan.next();
-		System.out.println("Enter the P2 name");
-		String player2 = scan.next();
-//		scan.nextLine();
+        System.out.println("Welcome to Tic-Tac-Toe!");
+        System.out.println("Please enter the name of Player 1:");
+        String player1 = scan.next();
+        System.out.println("Now, please enter the name of Player 2:");
+        String player2 = scan.next();
 		
 		HumanPlayer p1 = new HumanPlayer(player1, 'X');
 		HumanPlayer p2 = new HumanPlayer(player2, 'O');
@@ -128,16 +138,17 @@ public class LaunchGame {
 		cp = p1;
 		
 		TicTacToe.displayBoard();
-		
-		
-		while(true) {
 
-			System.out.println(cp.name + "'s Turn");
+		while(true) {
+			System.out.println(cp.name + ", it's your turn! Make your move.");
 			cp.makeMove();
 			TicTacToe.displayBoard();
 			if(TicTacToe.checkRowWin() || TicTacToe.checkColWin() || TicTacToe.checkDiagWin()) {
-				System.out.println(cp.name + " Won");
+				System.out.println("Congratulations " + cp.name + "! You have won the game!");
 				break;
+			}else if(HumanPlayer.isBoardFull()) {
+				System.out.println("Game Over - It's a tie!");
+                break;
 			}else {
 				if(cp == p1) {
 					cp = p2;
